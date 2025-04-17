@@ -10,8 +10,9 @@ import (
 func main() {
 	pool := db.InitPostgres()
 	patientRepo := pgrepo.NewPatientRepo(pool)
-	useCase := patient.NewRegisterPatient(patientRepo)
-	handler := http.NewPatientHandler(useCase)
+	registerUseCase := patient.NewRegisterPatient(patientRepo)
+	getterUseCase := patient.NewGetterPatient(patientRepo)
+	handler := http.NewPatientHandler(registerUseCase, getterUseCase)
 
 	r := http.SetupRouter(handler)
 	r.Run(":8080")

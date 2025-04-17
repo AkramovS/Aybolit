@@ -1,5 +1,7 @@
 package patient
 
+import "Aybolit/internal/domain/entity"
+
 type RegisterPatientInput struct {
 	FullName  string `json:"full_name"`
 	Phone     string `json:"phone"`
@@ -9,4 +11,8 @@ type RegisterPatientInput struct {
 
 type RegisterPatientUseCase interface {
 	Execute(input RegisterPatientInput) error
+}
+
+type GetterPatientUseCase interface {
+	Execute(id int64) (*entity.Patient, error)
 }
