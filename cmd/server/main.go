@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	pool := db.NewPostgresConnection()
+	pool := db.InitPostgres()
 	patientRepo := pgrepo.NewPatientRepo(pool)
 	useCase := patient.NewRegisterPatient(patientRepo)
 	handler := http.NewPatientHandler(useCase)
@@ -22,3 +22,7 @@ func main() {
 //// 3. Добавление новой сущности ( например доктор)
 //// 4. Добавить новые методы для новых сущностей
 //// 5. Пообщаться с чат гпт
+
+//////1. Создать для других сущностей БД
+//////2. Создать таблицу для сущ
+//////3. настрой для них роуты
