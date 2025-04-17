@@ -2,7 +2,6 @@ package http
 
 import (
 	"Aybolit/internal/usecase/patient"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
@@ -39,17 +38,13 @@ func (h *PatientHandler) Register(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "patient registered successfully"})
 }
 
-//TODO: implement get by id patient
-
 func (h *PatientHandler) GetByID(c *gin.Context) {
 	idParam := c.Query("id")
-	fmt.Println("i am Idparam=", idParam)
 	if idParam == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "ID is required"})
 		return
 	}
 	id, err := strconv.ParseInt(idParam, 10, 64)
-	fmt.Println("i am Id", id)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID"})
 		log.Println("error=", err)
