@@ -1,14 +1,19 @@
 package http
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+)
 
-func SetupRouter(patientHandler *PatientHandler) *gin.Engine {
+func SetupRouter(handler *Handlers) *gin.Engine {
 	router := gin.Default()
 
 	api := router.Group("/api")
 	{
-		api.POST("/patients", patientHandler.Register)
-		api.GET("/patients/patient", patientHandler.GetByID)
+		api.POST("/patients", handler.Patient.Register)
+		api.GET("/patients/patient", handler.Patient.GetByID)
+
+		api.POST("/doctors", handler.Doctor.Create)
+
 	}
 
 	return router

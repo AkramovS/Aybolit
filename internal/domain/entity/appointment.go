@@ -13,3 +13,8 @@ type Appointment struct {
 	UpdatedAt time.Time
 	Canceled  bool
 }
+
+func (a Appointment) Error() string {
+	//TODO implement me
+	panic("implement me")
+}
