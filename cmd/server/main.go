@@ -14,6 +14,7 @@ func main() {
 	//Регистрация репозитории
 	patientRepo := pgrepo.NewPatientRepo(pool)
 	doctorRepo := pgrepo.NewDoctorRepo(pool)
+	//Здесь должна быть appoinmentrepo
 
 	//Регистрация UseCase-ов
 	//Пациент
@@ -27,7 +28,7 @@ func main() {
 	//Регистрация Handler-ов
 	patientHandler := http.NewPatientHandler(registerPatientUseCase, getterPatientUseCase)
 	doctorHandler := http.NewDoctorHandler(createDoctorUseCase, getterDoctorUseCase)
-
+	//// Здесь должна быть Appointmenthandler
 	handler := http.NewHandlers(
 		doctorHandler,
 		patientHandler,
