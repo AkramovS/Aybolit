@@ -7,11 +7,11 @@ import (
 )
 
 type purposeAppointment struct {
-	repo repository.AppointmentRepository
+	appointmentRepo repository.AppointmentRepository
 }
 
-func NewPurposeDoctor(r repository.AppointmentRepository) AdoptionAppointmentUsecase {
-	return &purposeAppointment{repo: r}
+func NewPurposeDoctor(appointmentRepo repository.AppointmentRepository) AdoptionAppointmentUsecase {
+	return &purposeAppointment{appointmentRepo: appointmentRepo}
 }
 
 func (r *purposeAppointment) Execute(ctx context.Context, input AppointmentInput) (int64, error) {
@@ -25,7 +25,7 @@ func (r *purposeAppointment) Execute(ctx context.Context, input AppointmentInput
 		UpdatedAt: input.UpdatedAt,
 		Canceled:  input.Canceled,
 	}
-	id, err := r.repo.Create(ctx, appointment)
+	id, err := r.appointmentRepo.Create(ctx, appointment)
 	if err != nil {
 		return 0, err
 	}

@@ -16,10 +16,10 @@ type AppointmentInput struct {
 	UpdatedAt time.Time `json:"updated_at"`
 	Canceled  bool      `json:"canceled"`
 }
-type AdoptionAppointmentUsecase interface {
+type AdoptionAppointmentUseCase interface {
 	Execute(ctx context.Context, input AppointmentInput) (int64, error)
 }
 
-type GetterAppointmentUsecase interface {
+type GetterAppointmentUseCase interface {
 	Execute(id int64) (*entity.Appointment, error)
 }

@@ -54,7 +54,7 @@ func (r *AppointmentRepo) Delete(ctx context.Context, id int64) error {
 }
 
 func (r *AppointmentRepo) ListByDoctor(ctx context.Context, doctorID int64) ([]*entity.Appointment, error) {
-	query := `INSERT INTO appoinments(patient_id, doctor_id, start_time, end_time, notes, created_at, updated_at, canceled )`
+	query := `SELECT patient_id, doctor_id, start_time, end_time, notes, created_at, updated_at, canceled FROM appointments WHERE doctor_id = $1;`
 	_, err := r.db.Query(context.Background(), query, doctorID)
 	if err != nil {
 		return nil, err
@@ -63,7 +63,7 @@ func (r *AppointmentRepo) ListByDoctor(ctx context.Context, doctorID int64) ([]*
 }
 
 func (r *AppointmentRepo) ListByPatient(ctx context.Context, patientID int64) ([]*entity.Appointment, error) {
-	query := `INSERT INTO appoinments(patient_id, doctor_id, created_at, updated_at, canceled )`
+	query := `SELECT patient_id, doctor_id, created_at, updated_at, canceled  FROM appointments WHERE patient_id = $1;`
 	_, err := r.db.Query(context.Background(), query, patientID)
 	if err != nil {
 		return nil, err

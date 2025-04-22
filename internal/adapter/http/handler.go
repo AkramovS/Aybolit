@@ -4,10 +4,8 @@ type Handlers struct {
 	Patient     *PatientHandler
 	Doctor      *DoctorHandler
 	Appointment *AppointmentHandler
-	//Appoinment handler
 }
 
-// Regenerate constructor
-func NewHandlers(doctor *DoctorHandler, patient *PatientHandler) *Handlers {
-	return &Handlers{Doctor: doctor, Patient: patient}
+func NewHandlers(patient *PatientHandler, appointment *AppointmentHandler, doctor *DoctorHandler) *Handlers {
+	return &Handlers{Patient: patient, Appointment: appointment, Doctor: doctor}
 }

@@ -4,6 +4,7 @@ import (
 	"Aybolit/internal/adapter/http"
 	pgrepo "Aybolit/internal/adapter/repository/postgres"
 	"Aybolit/internal/infra/db"
+	"Aybolit/internal/usecase/appointment"
 	"Aybolit/internal/usecase/doctor"
 	"Aybolit/internal/usecase/patient"
 )
@@ -14,7 +15,7 @@ func main() {
 	//Регистрация репозитории
 	patientRepo := pgrepo.NewPatientRepo(pool)
 	doctorRepo := pgrepo.NewDoctorRepo(pool)
-	//Здесь должна быть appoinmentrepo
+	appointmentRepo := pgrepo.NewAppointmentRepo(pool)
 
 	//Регистрация UseCase-ов
 	//Пациент
@@ -24,14 +25,17 @@ func main() {
 	createDoctorUseCase := doctor.NewCreateDoctor(doctorRepo)
 	getterDoctorUseCase := doctor.NewGetterDoctor(doctorRepo)
 	//Записи
+	adoptionAppointmentUseCase := appointment.NewPurposeDoctor(appointmentRepo)
 
 	//Регистрация Handler-ов
 	patientHandler := http.NewPatientHandler(registerPatientUseCase, getterPatientUseCase)
 	doctorHandler := http.NewDoctorHandler(createDoctorUseCase, getterDoctorUseCase)
-	//// Здесь должна быть Appointmenthandler
+	appointmentHandler := http.NewAppointmentHandler(adoptionAppointmentUseCase)
+
 	handler := http.NewHandlers(
-		doctorHandler,
 		patientHandler,
+		appointmentHandler,
+		doctorHandler,
 	)
 
 	r := http.SetupRouter(handler)
