@@ -24,7 +24,8 @@ func (r *registerPatient) Execute(input RegisterPatientInput) error {
 	}
 
 	patient := &entity.Patient{
-		FullName:  input.FullName,
+		FirstName: input.FirstName,
+		LastName:  input.LastName,
 		Phone:     input.Phone,
 		BirthDate: timeBirthDate,
 		Notes:     input.Notes,

@@ -15,7 +15,8 @@ func NewCreateDoctor(r repository.DoctorRepository) CreateDoctorUseCase {
 
 func (r *createDoctor) Execute(input CreateDoctorInput) error {
 	doctor := &entity.Doctor{
-		Name:       input.Name,
+		FirstName:  input.FirstName,
+		LastName:   input.LastName,
 		Activity:   input.Activity,
 		Experience: input.Experience,
 		Phone:      input.Phone,

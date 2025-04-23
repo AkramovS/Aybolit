@@ -3,7 +3,8 @@ package patient
 import "Aybolit/internal/domain/entity"
 
 type RegisterPatientInput struct {
-	FullName  string `json:"full_name"`
+	FirstName string `json:"first_name"`
+	LastName  string `json:"last_name"`
 	Phone     string `json:"phone"`
 	BirthDate string `json:"birth_date"`
 	Notes     string `json:"notes"`

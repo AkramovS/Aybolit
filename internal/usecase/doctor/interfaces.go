@@ -3,7 +3,8 @@ package doctor
 import "Aybolit/internal/domain/entity"
 
 type CreateDoctorInput struct {
-	Name       string `json:"name"`
+	FirstName  string `json:"first_name"`
+	LastName   string `json:"last_name"`
 	Activity   string `json:"activity"`
 	Experience string `json:"experience"`
 	Phone      string `json:"phone"`

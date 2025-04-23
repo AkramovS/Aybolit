@@ -4,7 +4,8 @@ import "time"
 
 type Patient struct {
 	ID        int64
-	FullName  string
+	FirstName string
+	LastName  string
 	Phone     string
 	BirthDate time.Time
 	Notes     string
