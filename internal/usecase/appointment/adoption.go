@@ -10,7 +10,7 @@ type purposeAppointment struct {
 	appointmentRepo repository.AppointmentRepository
 }
 
-func NewPurposeDoctor(appointmentRepo repository.AppointmentRepository) AdoptionAppointmentUsecase {
+func NewPurposeDoctor(appointmentRepo repository.AppointmentRepository) AdoptionAppointmentUseCase {
 	return &purposeAppointment{appointmentRepo: appointmentRepo}
 }
 

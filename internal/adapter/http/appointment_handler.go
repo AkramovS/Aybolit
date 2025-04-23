@@ -7,10 +7,10 @@ import (
 )
 
 type AppointmentHandler struct {
-	adoptionAppointmentUseCase appointment.AdoptionAppointmentUsecase
+	adoptionAppointmentUseCase appointment.AdoptionAppointmentUseCase
 }
 
-func NewAppointmentHandler(adoptionAppointmentUseCase appointment.AdoptionAppointmentUsecase) *AppointmentHandler {
+func NewAppointmentHandler(adoptionAppointmentUseCase appointment.AdoptionAppointmentUseCase) *AppointmentHandler {
 	return &AppointmentHandler{adoptionAppointmentUseCase: adoptionAppointmentUseCase}
 
 }
