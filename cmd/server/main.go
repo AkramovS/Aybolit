@@ -24,12 +24,13 @@ func main() {
 	//Доктор
 	createDoctorUseCase := doctor.NewCreateDoctor(doctorRepo)
 	getterDoctorUseCase := doctor.NewGetterDoctor(doctorRepo)
+	getterAllDoctorsUseCase := doctor.NewGetterByFilter(doctorRepo)
 	//Записи
 	adoptionAppointmentUseCase := appointment.NewPurposeDoctor(appointmentRepo)
 
 	//Регистрация Handler-ов
 	patientHandler := http.NewPatientHandler(registerPatientUseCase, getterPatientUseCase)
-	doctorHandler := http.NewDoctorHandler(createDoctorUseCase, getterDoctorUseCase)
+	doctorHandler := http.NewDoctorHandler(createDoctorUseCase, getterDoctorUseCase, getterAllDoctorsUseCase)
 	appointmentHandler := http.NewAppointmentHandler(adoptionAppointmentUseCase)
 
 	handler := http.NewHandlers(

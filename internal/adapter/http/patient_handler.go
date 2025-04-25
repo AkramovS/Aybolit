@@ -64,3 +64,55 @@ func (h *PatientHandler) GetByID(c *gin.Context) {
 
 	c.JSON(http.StatusOK, patient)
 }
+
+//Поиск пациента по его имени
+
+func (h *PatientHandler) GetByName(c *gin.Context) {
+	nameParam := c.Query("first_name")
+	if nameParam == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "First name is required"})
+		return
+	}
+	_, err := strconv.ParseInt(nameParam, 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid first_name"})
+		log.Println("error=", err)
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "patients found"})
+}
+
+//Поиск пациента по его фамилии
+
+func (h *PatientHandler) GetByLastName(c *gin.Context) {
+	lnameParam := c.Query("last_name")
+	if lnameParam == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Last name is required"})
+		return
+	}
+	_, err := strconv.ParseInt(lnameParam, 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid last_name"})
+		log.Println("error=", err)
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "patients found"})
+}
+
+//Поиск пациента по его номеру телефона
+
+func (h *PatientHandler) GetByPhoneNumber(c *gin.Context) {
+	phoneNumberParam := c.Query("phone_number")
+	if phoneNumberParam == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Phone number is required"})
+		return
+	}
+	_, err := strconv.ParseInt(phoneNumberParam, 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid phone_number"})
+		log.Println("error=", err)
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "patients found"})
+}

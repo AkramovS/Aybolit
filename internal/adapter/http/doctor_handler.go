@@ -1,6 +1,7 @@
 package http
 
 import (
+	"Aybolit/internal/domain/entity"
 	"Aybolit/internal/usecase/doctor"
 	"github.com/gin-gonic/gin"
 	"log"
@@ -9,17 +10,20 @@ import (
 )
 
 type DoctorHandler struct {
-	createDoctorUseCase doctor.CreateDoctorUseCase
-	getterDoctorUseCase doctor.GetterDoctorUseCase
+	createDoctorUseCase  doctor.CreateDoctorUseCase
+	getterDoctorUseCase  doctor.GetterDoctorUseCase
+	getAllDoctorsUseCase doctor.GetAllDoctorsUseCase
 }
 
 func NewDoctorHandler(
 	createDoctorUseCase doctor.CreateDoctorUseCase,
 	getterDoctorUseCase doctor.GetterDoctorUseCase,
+	getAllDoctorsUseCase doctor.GetAllDoctorsUseCase,
 ) *DoctorHandler {
 	return &DoctorHandler{
-		createDoctorUseCase: createDoctorUseCase,
-		getterDoctorUseCase: getterDoctorUseCase,
+		createDoctorUseCase:  createDoctorUseCase,
+		getterDoctorUseCase:  getterDoctorUseCase,
+		getAllDoctorsUseCase: getAllDoctorsUseCase,
 	}
 }
 
@@ -38,9 +42,9 @@ func (h *DoctorHandler) Create(c *gin.Context) {
 	c.JSON(http.StatusCreated, gin.H{"message": "doctor created successfully"})
 }
 
-//TODO: имплементировать GET by ID
+//Поиск доктора по его ID
 
-func (h *DoctorHandler) Get(c *gin.Context) {
+func (h *DoctorHandler) GetById(c *gin.Context) {
 	idParam := c.Query("id")
 	if idParam == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "id is required"})
@@ -59,4 +63,23 @@ func (h *DoctorHandler) Get(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"doctor": doctor})
+}
+
+// Поиск доктора по его имени
+
+func (h *DoctorHandler) GetByFilters(c *gin.Context) {
+	var filter entity.DoctorQueryParams
+
+	if err := c.ShouldBindQuery(&filter); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid query parameters"})
+		return
+	}
+
+	doctors, err := h.getAllDoctorsUseCase.Execute(c, filter)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "could not get doctors"})
+		log.Println("could not get doctors: ", err)
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"doctors": doctors})
 }
