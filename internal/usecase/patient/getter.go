@@ -9,7 +9,7 @@ type getterPatient struct {
 	repo repository.PatientRepository
 }
 
-func NewGetterPatient(r repository.PatientRepository) GetterPatientUseCase {
+func NewGetterPatient(r repository.PatientRepository) GetterPatientsUseCase {
 	return &getterPatient{repo: r}
 }
 

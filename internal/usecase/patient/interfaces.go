@@ -1,6 +1,9 @@
 package patient
 
-import "Aybolit/internal/domain/entity"
+import (
+	"Aybolit/internal/domain/entity"
+	"context"
+)
 
 type RegisterPatientInput struct {
 	FirstName string `json:"first_name"`
@@ -14,6 +17,10 @@ type RegisterPatientUseCase interface {
 	Execute(input RegisterPatientInput) error
 }
 
-type GetterPatientUseCase interface {
+type GetterPatientsUseCase interface {
 	Execute(id int64) (*entity.Patient, error)
+}
+
+type GetAllPatientsUseCase interface {
+	Execute(ctx context.Context, filters entity.PatientsQueryParams) ([]*entity.Patient, error)
 }

@@ -44,6 +44,17 @@ func (h *DoctorHandler) Create(c *gin.Context) {
 
 //Поиск доктора по его ID
 
+// GetById godoc
+// @Summary Получить доктора по ID
+// @Description Возвращает данные доктора по его идентификатору
+// @Tags doctors
+// @Accept json
+// @Produce json
+// @Param id query int true "ID доктора"
+// @Success 200 {object} entity.Doctor
+// @Failure 400 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /api/doctors/doctor [get]
 func (h *DoctorHandler) GetById(c *gin.Context) {
 	idParam := c.Query("id")
 	if idParam == "" {
@@ -65,7 +76,22 @@ func (h *DoctorHandler) GetById(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"doctor": doctor})
 }
 
-// Поиск доктора по его имени
+// GetByFilters godoc
+// @Summary Получить список докторов по фильтрам
+// @Description Возвращает список докторов, применяя переданные фильтры
+// @Tags doctors
+// @Accept json
+// @Produce json
+// @Param first_name query string false "Имя доктора"
+// @Param last_name query string false "Фамилия доктора"
+// @Param active query bool false "Активность доктора"
+// @Param experience query int64 false "Опыт работы (в годах)"
+// @Param phone query string false "Телефон доктора"
+// @Param email query string false "Email доктора"
+// @Success 200 {object} []entity.Doctor "Список докторов"
+// @Failure 400 {object} map[string]string "Некорректные параметры запроса"
+// @Failure 500 {object} map[string]string "Ошибка сервера"
+// @Router /api/doctors/list [get]
 
 func (h *DoctorHandler) GetByFilters(c *gin.Context) {
 	var filter entity.DoctorQueryParams

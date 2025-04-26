@@ -10,3 +10,9 @@ type Patient struct {
 	BirthDate time.Time
 	Notes     string
 }
+
+type PatientsQueryParams struct {
+	FirstName string `form:"first_name"`
+	LastName  string `form:"last_name"`
+	Phone     string `form:"phone"`
+}

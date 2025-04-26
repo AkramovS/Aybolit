@@ -1,6 +1,7 @@
 package http
 
 import (
+	"Aybolit/internal/domain/entity"
 	"Aybolit/internal/usecase/patient"
 	"github.com/gin-gonic/gin"
 	"log"
@@ -10,16 +11,19 @@ import (
 
 type PatientHandler struct {
 	registerPatientUseCase patient.RegisterPatientUseCase
-	getterPatientUseCase   patient.GetterPatientUseCase
+	getterPatientUseCase   patient.GetterPatientsUseCase
+	getAllPatientsUseCase  patient.GetAllPatientsUseCase
 }
 
 func NewPatientHandler(
 	registerPatientUseCase patient.RegisterPatientUseCase,
-	getterPatientUseCase patient.GetterPatientUseCase,
+	getterPatientUseCase patient.GetterPatientsUseCase,
+	getAllPatientsUseCase patient.GetAllPatientsUseCase,
 ) *PatientHandler {
 	return &PatientHandler{
 		registerPatientUseCase: registerPatientUseCase,
 		getterPatientUseCase:   getterPatientUseCase,
+		getAllPatientsUseCase:  getAllPatientsUseCase,
 	}
 }
 
@@ -41,6 +45,18 @@ func (h *PatientHandler) Register(c *gin.Context) {
 }
 
 // Поиск пациента по его ID
+
+// GetByID godoc
+// @Summary Получить пациента по ID
+// @Description Возвращает данные пациента по его идентификатору
+// @Tags patients
+// @Accept json
+// @Produce json
+// @Param id query int true "ID пациента"
+// @Success 200 {object} entity.Patient
+// @Failure 400 {object} map[string]string
+// @Failure 404 {object} map[string]string
+// @Router /api/patients/patient [get]
 
 func (h *PatientHandler) GetByID(c *gin.Context) {
 	idParam := c.Query("id")
@@ -65,54 +81,33 @@ func (h *PatientHandler) GetByID(c *gin.Context) {
 	c.JSON(http.StatusOK, patient)
 }
 
-//Поиск пациента по его имени
+// GetByFilters godoc
+// @Summary Получить список пациентов по фильтрам
+// @Description Возвращает список пациентов, отфильтрованных по заданным параметрам
+// @Tags patients
+// @Accept json
+// @Produce json
+// @Param first_name query string false "Имя пациента"
+// @Param last_name query string false "Фамилия пациента"
+// @Param phone query string false "Телефон пациента"
+// @Success 200 {object} dto.PatientsResponse
+// @Failure 400 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /api/patients/list [get]
 
-func (h *PatientHandler) GetByName(c *gin.Context) {
-	nameParam := c.Query("first_name")
-	if nameParam == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "First name is required"})
+func (h *PatientHandler) GetByFilters(c *gin.Context) {
+	var filter entity.PatientsQueryParams
+
+	if err := c.ShouldBindQuery(&filter); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid filter"})
 		return
 	}
-	_, err := strconv.ParseInt(nameParam, 10, 64)
+
+	patients, err := h.getAllPatientsUseCase.Execute(c, filter)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid first_name"})
-		log.Println("error=", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Patients not found"})
+		log.Println("could not get patients:", err)
 		return
 	}
-
-	c.JSON(http.StatusOK, gin.H{"message": "patients found"})
-}
-
-//Поиск пациента по его фамилии
-
-func (h *PatientHandler) GetByLastName(c *gin.Context) {
-	lnameParam := c.Query("last_name")
-	if lnameParam == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Last name is required"})
-		return
-	}
-	_, err := strconv.ParseInt(lnameParam, 10, 64)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid last_name"})
-		log.Println("error=", err)
-		return
-	}
-	c.JSON(http.StatusOK, gin.H{"message": "patients found"})
-}
-
-//Поиск пациента по его номеру телефона
-
-func (h *PatientHandler) GetByPhoneNumber(c *gin.Context) {
-	phoneNumberParam := c.Query("phone_number")
-	if phoneNumberParam == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Phone number is required"})
-		return
-	}
-	_, err := strconv.ParseInt(phoneNumberParam, 10, 64)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid phone_number"})
-		log.Println("error=", err)
-		return
-	}
-	c.JSON(http.StatusOK, gin.H{"message": "patients found"})
+	c.JSON(http.StatusOK, gin.H{"patients": patients})
 }
