@@ -57,7 +57,6 @@ func (h *PatientHandler) Register(c *gin.Context) {
 // @Failure 400 {object} map[string]string
 // @Failure 404 {object} map[string]string
 // @Router /api/patients/patient [get]
-
 func (h *PatientHandler) GetByID(c *gin.Context) {
 	idParam := c.Query("id")
 	if idParam == "" {
@@ -90,11 +89,10 @@ func (h *PatientHandler) GetByID(c *gin.Context) {
 // @Param first_name query string false "Имя пациента"
 // @Param last_name query string false "Фамилия пациента"
 // @Param phone query string false "Телефон пациента"
-// @Success 200 {object} dto.PatientsResponse
+// @Success 200 {object} []entity.Patient
 // @Failure 400 {object} map[string]string
 // @Failure 500 {object} map[string]string
 // @Router /api/patients/list [get]
-
 func (h *PatientHandler) GetByFilters(c *gin.Context) {
 	var filter entity.PatientsQueryParams
 

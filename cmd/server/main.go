@@ -3,14 +3,11 @@ package main
 import (
 	"Aybolit/internal/adapter/http"
 	pgrepo "Aybolit/internal/adapter/repository/postgres"
-	"Aybolit/internal/infra/auth"
 	"Aybolit/internal/infra/db"
 	"Aybolit/internal/usecase/appointment"
 	"Aybolit/internal/usecase/doctor"
 	"Aybolit/internal/usecase/patient"
-	"Aybolit/pkg/config"
-	"github.com/gin-gonic/gin"
-	"log"
+	"Aybolit/internal/usecase/user"
 )
 
 func main() {
@@ -20,8 +17,12 @@ func main() {
 	patientRepo := pgrepo.NewPatientRepo(pool)
 	doctorRepo := pgrepo.NewDoctorRepo(pool)
 	appointmentRepo := pgrepo.NewAppointmentRepo(pool)
+	userRepo := pgrepo.NewUserRepo(pool)
 
 	//Регистрация UseCase-ов
+	//Пользователь
+	registerUserUseCase := user.NewCreateUser(userRepo)
+	loginUserUseCase := user.NewLoginUser(userRepo)
 	//Пациент
 	registerPatientUseCase := patient.NewRegisterPatient(patientRepo)
 	getterPatientUseCase := patient.NewGetterPatient(patientRepo)
@@ -37,28 +38,16 @@ func main() {
 	patientHandler := http.NewPatientHandler(registerPatientUseCase, getterPatientUseCase, getterAllPatientUseCase)
 	doctorHandler := http.NewDoctorHandler(createDoctorUseCase, getterDoctorUseCase, getterAllDoctorsUseCase)
 	appointmentHandler := http.NewAppointmentHandler(adoptionAppointmentUseCase)
+	userHandler := http.NewUserHandler(registerUserUseCase, loginUserUseCase)
 
 	handler := http.NewHandlers(
 		patientHandler,
 		appointmentHandler,
 		doctorHandler,
+		userHandler,
 	)
 
 	r := http.SetupRouter(handler)
 	r.Run(":8080")
 
-	cfg := config.Load()
-
-	// Инициализация JWT
-	auth.InitJWT(cfg.JWTSecret)
-
-	// Инициализация Gin сервера
-	router := gin.Default()
-
-	// Запуск
-	addr := ":" + cfg.Port
-	log.Printf("Server running on %s", addr)
-	if err := router.Run(addr); err != nil {
-		log.Fatalf("Failed to run server: %v", err)
-	}
 }

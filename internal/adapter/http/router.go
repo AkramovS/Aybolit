@@ -2,7 +2,6 @@ package http
 
 import (
 	_ "Aybolit/docs"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -16,18 +15,13 @@ import (
 
 func SetupRouter(handler *Handlers) *gin.Engine {
 	router := gin.Default()
+	router.Use(LoggerMiddleware())
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	api := router.Group("/api")
 	{
-
-		api.GET("/protected", AuthMiddleware("admin", "doctor"), AuthMiddleware("admin", "doctor"), func(c *gin.Context) {
-			userID := c.GetInt64("userID")
-			role := c.GetString("role")
-			c.JSON(200, gin.H{
-				"message": fmt.Sprintf("User ID: %d, Role: %s", userID, role),
-			})
-		})
+		api.POST("/register", handler.User.Register)
+		api.POST("/login", handler.User.Login)
 
 		api.POST("/patients", handler.Patient.Register)
 		api.GET("/patients/patient", handler.Patient.GetByID)

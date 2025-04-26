@@ -92,7 +92,6 @@ func (h *DoctorHandler) GetById(c *gin.Context) {
 // @Failure 400 {object} map[string]string "Некорректные параметры запроса"
 // @Failure 500 {object} map[string]string "Ошибка сервера"
 // @Router /api/doctors/list [get]
-
 func (h *DoctorHandler) GetByFilters(c *gin.Context) {
 	var filter entity.DoctorQueryParams
 

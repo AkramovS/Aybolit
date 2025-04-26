@@ -1,42 +1,22 @@
 package http
 
 import (
-	"net/http"
-	"strings"
-
-	"Aybolit/internal/infra/auth"
 	"github.com/gin-gonic/gin"
+	"log"
+	"time"
 )
 
-func AuthMiddleware(roles ...string) gin.HandlerFunc {
+func LoggerMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		header := c.GetHeader("Authorization")
-		if !strings.HasPrefix(header, "Bearer ") {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Authorization header missing"})
-			return
-		}
+		start := time.Now()
 
-		tokenStr := strings.TrimPrefix(header, "Bearer ")
-		claims, err := auth.ParseToken(tokenStr)
-		if err != nil {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
-			return
-		}
-
-		allowed := false
-		for _, role := range roles {
-			if claims.Role == role {
-				allowed = true
-				break
-			}
-		}
-		if !allowed {
-			c.AbortWithStatusJSON(http.StatusForbidden, gin.H{"error": "Access forbidden"})
-			return
-		}
-
-		c.Set("userID", claims.UserID)
-		c.Set("role", claims.Role)
+		// Передаем управление следующему middleware или обработчику
 		c.Next()
+
+		duration := time.Since(start)
+		statusCode := c.Writer.Status()
+
+		// Логируем информацию о запросе
+		log.Printf("Method: %s, Path: %s, Status: %d, Duration: %v\n", c.Request.Method, c.Request.URL.Path, statusCode, duration)
 	}
 }
