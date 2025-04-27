@@ -1,3 +1,3 @@
-package user
+package jwt
 
 const jwtKey = "nowords"

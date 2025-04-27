@@ -1,4 +1,4 @@
-package http
+package handlers
 
 import (
 	"Aybolit/internal/domain/entity"
@@ -54,6 +54,7 @@ func (h *DoctorHandler) Create(c *gin.Context) {
 // @Success 200 {object} entity.Doctor
 // @Failure 400 {object} map[string]string
 // @Failure 500 {object} map[string]string
+// @Security BearerAuth
 // @Router /api/doctors/doctor [get]
 func (h *DoctorHandler) GetById(c *gin.Context) {
 	idParam := c.Query("id")

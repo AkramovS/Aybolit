@@ -2,6 +2,8 @@ package http
 
 import (
 	_ "Aybolit/docs"
+	"Aybolit/internal/adapter/http/handlers"
+	"Aybolit/internal/adapter/http/middleware"
 	"github.com/gin-gonic/gin"
 	"github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -12,17 +14,21 @@ import (
 // @description API for Aybolit CRM
 // @host localhost:8080
 // @BasePath /
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
 
-func SetupRouter(handler *Handlers) *gin.Engine {
+func SetupRouter(handler *handlers.Handlers) *gin.Engine {
 	router := gin.Default()
-	router.Use(LoggerMiddleware())
+	router.Use(middleware.LoggerMiddleware())
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	api := router.Group("/api")
-	{
-		api.POST("/register", handler.User.Register)
-		api.POST("/login", handler.User.Login)
+	router.POST("/register", handler.User.Register)
+	router.POST("/login", handler.User.Login)
 
+	api := router.Group("/api")
+	api.Use(middleware.AuthMiddleware())
+	{
 		api.POST("/patients", handler.Patient.Register)
 		api.GET("/patients/patient", handler.Patient.GetByID)
 		api.GET("/patients/list", handler.Patient.GetByFilters)

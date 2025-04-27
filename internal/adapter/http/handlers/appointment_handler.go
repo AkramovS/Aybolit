@@ -1,4 +1,4 @@
-package http
+package handlers
 
 import (
 	"Aybolit/internal/usecase/appointment"

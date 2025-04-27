@@ -1,4 +1,4 @@
-package http
+package handlers
 
 import (
 	"Aybolit/internal/usecase/user"
@@ -31,7 +31,7 @@ func NewUserHandler(
 // @Success      201 {object} map[string]string "Пользователь успешно создан"
 // @Failure      400 {object} map[string]string "Неверный формат данных"
 // @Failure      500 {object} map[string]string "Ошибка сервера при создании пользователя"
-// @Router       /api/register [post]
+// @Router       /register [post]
 func (h *UserHandler) Register(c *gin.Context) {
 	var input user.RegisterUserInput
 	if err := c.ShouldBindJSON(&input); err != nil {
@@ -57,7 +57,7 @@ func (h *UserHandler) Register(c *gin.Context) {
 // @Success      200 {object} map[string]string "Пример: {\"token\": \"your.jwt.token\"}"
 // @Failure      400 {object} map[string]string "Ошибка валидации"
 // @Failure      500 {object} map[string]string "Внутренняя ошибка"
-// @Router       /api/login [post]
+// @Router       /login [post]
 func (h *UserHandler) Login(c *gin.Context) {
 	var input user.LoginUserInput
 	if err := c.ShouldBindJSON(&input); err != nil {

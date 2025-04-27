@@ -2,6 +2,7 @@ package main
 
 import (
 	"Aybolit/internal/adapter/http"
+	"Aybolit/internal/adapter/http/handlers"
 	pgrepo "Aybolit/internal/adapter/repository/postgres"
 	"Aybolit/internal/infra/db"
 	"Aybolit/internal/usecase/appointment"
@@ -35,12 +36,12 @@ func main() {
 	adoptionAppointmentUseCase := appointment.NewPurposeDoctor(appointmentRepo)
 
 	//Регистрация Handler-ов
-	patientHandler := http.NewPatientHandler(registerPatientUseCase, getterPatientUseCase, getterAllPatientUseCase)
-	doctorHandler := http.NewDoctorHandler(createDoctorUseCase, getterDoctorUseCase, getterAllDoctorsUseCase)
-	appointmentHandler := http.NewAppointmentHandler(adoptionAppointmentUseCase)
-	userHandler := http.NewUserHandler(registerUserUseCase, loginUserUseCase)
+	patientHandler := handlers.NewPatientHandler(registerPatientUseCase, getterPatientUseCase, getterAllPatientUseCase)
+	doctorHandler := handlers.NewDoctorHandler(createDoctorUseCase, getterDoctorUseCase, getterAllDoctorsUseCase)
+	appointmentHandler := handlers.NewAppointmentHandler(adoptionAppointmentUseCase)
+	userHandler := handlers.NewUserHandler(registerUserUseCase, loginUserUseCase)
 
-	handler := http.NewHandlers(
+	handler := handlers.NewHandlers(
 		patientHandler,
 		appointmentHandler,
 		doctorHandler,

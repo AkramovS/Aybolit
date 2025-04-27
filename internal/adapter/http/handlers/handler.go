@@ -1,4 +1,4 @@
-package http
+package handlers
 
 type Handlers struct {
 	Patient     *PatientHandler
