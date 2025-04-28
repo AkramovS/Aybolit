@@ -9,7 +9,7 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-// @title Aybolit API
+// SetupRouter @title Aybolit API
 // @version 1.0
 // @description API for Aybolit CRM
 // @host localhost:8080
@@ -17,7 +17,7 @@ import (
 // @securityDefinitions.apikey BearerAuth
 // @in header
 // @name Authorization
-
+// @description Type "Bearer" followed by a space and JWT token.
 func SetupRouter(handler *handlers.Handlers) *gin.Engine {
 	router := gin.Default()
 	router.Use(middleware.LoggerMiddleware())
@@ -36,11 +36,6 @@ func SetupRouter(handler *handlers.Handlers) *gin.Engine {
 		api.POST("/doctors", handler.Doctor.Create)
 		api.GET("/doctors/doctor", handler.Doctor.GetById)
 		api.GET("/doctors/list", handler.Doctor.GetByFilters)
-		//TODO Disactive doctor by id
-		//TODO Getappointments by filter
-		//TODO get appointment by id
-		//TODO get patient by filters
-		//TODO Update appointments
 
 		api.POST("/appointment", handler.Appointment.Adoption)
 	}

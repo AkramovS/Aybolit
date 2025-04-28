@@ -11,6 +11,15 @@ import (
 	"Aybolit/internal/usecase/user"
 )
 
+// @title Aybolit API
+// @version 1.0
+// @description API for Aybolit CRM
+// @host localhost:8080
+// @BasePath /
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
+
 func main() {
 	pool := db.InitPostgres()
 

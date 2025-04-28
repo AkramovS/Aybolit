@@ -29,6 +29,18 @@ func NewPatientHandler(
 
 //Создание пациента
 
+// Register godoc
+// @Summary Register a new patient
+// @Description Register a new patient in the system
+// @Tags patients
+// @Accept json
+// @Produce json
+// @Param patient body patient.RegisterPatientInput true "Patient info"
+// @Success 200 {object} map[string]string
+// @Failure 400 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Security BearerAuth
+// @Router /api/patients [post]
 func (h *PatientHandler) Register(c *gin.Context) {
 	var input patient.RegisterPatientInput
 	if err := c.ShouldBindJSON(&input); err != nil {
@@ -38,6 +50,7 @@ func (h *PatientHandler) Register(c *gin.Context) {
 
 	if err := h.registerPatientUseCase.Execute(input); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "could not register patient"})
+		log.Println(err)
 		return
 	}
 

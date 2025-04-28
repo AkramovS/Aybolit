@@ -17,7 +17,7 @@ func NewDoctorRepo(db *pgxpool.Pool) *DoctorRepo {
 
 func (r *DoctorRepo) Create(p *entity.Doctor) error {
 	query := `INSERT INTO doctors (first_name, last_name, activity, experience, phone, email, notes) 
-				VALUES ($1, $2, $3, $4, $5, $6);`
+				VALUES ($1, $2, $3, $4, $5, $6, $7);`
 	_, err := r.db.Exec(context.Background(), query, p.FirstName, p.LastName, p.Activity, p.Experience, p.Phone, p.Email, p.Notes)
 	return err
 }

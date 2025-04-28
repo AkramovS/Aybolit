@@ -16,7 +16,7 @@ func NewRegisterPatient(r repository.PatientRepository) RegisterPatientUseCase {
 }
 
 func (r *registerPatient) Execute(input RegisterPatientInput) error {
-	layout := "2006-01-02 15:04:05"
+	layout := "2006-01-02"
 	timeBirthDate, err := time.Parse(layout, input.BirthDate)
 	if err != nil {
 		log.Println("Error parsing time:", err)

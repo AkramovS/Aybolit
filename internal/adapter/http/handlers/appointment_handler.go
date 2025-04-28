@@ -15,6 +15,18 @@ func NewAppointmentHandler(adoptionAppointmentUseCase appointment.AdoptionAppoin
 
 }
 
+// Adoption godoc
+// @Summary Create new appointment (Adoption)
+// @Description Registers a new appointment between a patient and a doctor
+// @Tags Appointments
+// @Accept json
+// @Produce json
+// @Param appointment body appointment.AppointmentInput true "Appointment details"
+// @Success 201 {object} map[string]string "adoption added successfully"
+// @Failure 400 {object} map[string]string "bad request"
+// @Failure 500 {object} map[string]string "could not adoption"
+// @Security BearerAuth
+// @Router /api/appointment [post]
 func (h *AppointmentHandler) Adoption(c *gin.Context) {
 	var input appointment.AppointmentInput
 	if err := c.ShouldBind(&input); err != nil {

@@ -27,6 +27,18 @@ func NewDoctorHandler(
 	}
 }
 
+// Create godoc
+// @Summary Create a new doctor
+// @Description Create a new doctor in the system
+// @Tags doctors
+// @Accept json
+// @Produce json
+// @Param doctor body doctor.CreateDoctorInput true "Doctor info"
+// @Success 201 {object} map[string]string
+// @Failure 400 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Security BearerAuth
+// @Router /api/doctors [post]
 func (h *DoctorHandler) Create(c *gin.Context) {
 	var input doctor.CreateDoctorInput
 	if err := c.ShouldBindJSON(&input); err != nil {
@@ -36,6 +48,7 @@ func (h *DoctorHandler) Create(c *gin.Context) {
 
 	if err := h.createDoctorUseCase.Execute(input); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "could not create doctor"})
+		log.Println(err)
 		return
 	}
 
@@ -45,6 +58,7 @@ func (h *DoctorHandler) Create(c *gin.Context) {
 //Поиск доктора по его ID
 
 // GetById godoc
+// @Security BearerAuth
 // @Summary Получить доктора по ID
 // @Description Возвращает данные доктора по его идентификатору
 // @Tags doctors
@@ -54,7 +68,6 @@ func (h *DoctorHandler) Create(c *gin.Context) {
 // @Success 200 {object} entity.Doctor
 // @Failure 400 {object} map[string]string
 // @Failure 500 {object} map[string]string
-// @Security BearerAuth
 // @Router /api/doctors/doctor [get]
 func (h *DoctorHandler) GetById(c *gin.Context) {
 	idParam := c.Query("id")

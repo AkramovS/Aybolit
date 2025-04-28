@@ -1,3 +1,3 @@
 package jwt
 
-const jwtKey = "nowords"
+var jwtKey = []byte("nowords")
